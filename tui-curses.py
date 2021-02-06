@@ -4,7 +4,6 @@
 import curses
 from curses import wrapper
 
-'''
 # the standard screen (named after the C variable)
 stdscr = curses.initscr()
 
@@ -20,6 +19,7 @@ stdscr.addstr(0,0, 'Hello World', curses.A_BOLD)
 stdscr.refresh()
 
 cmd = stdscr.getch()
+cmd2 = stdscr.getkey()
 
 stdscr.addch(cmd, curses.A_ITALIC)
 stdscr.refresh()
@@ -34,13 +34,6 @@ stdscr.keypad(False)
 # then, the screen can be closed
 curses.endwin()
 
-print(type(cmd))
-'''
-
-def main(stdscr):
-    stdscr.addstr('Hello')
-    stdscr.refresh()
-
-    curses.napms(2000)
-
-wrapper(main)
+print(cmd)
+print(cmd2)
+print(curses.KEY_RIGHT)
