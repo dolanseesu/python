@@ -6,6 +6,10 @@ There will be 3 areas:
     - in progress
     - done
 
+Features to add:
+- config file
+- load from file and save changes (json/clear text)
+- encryption of saved files?
 '''
 
 import curses
@@ -17,6 +21,35 @@ def main(stdscr):
 
 curses.wrapper(main)
 '''
+
+''' DEFINE KEYBINDINGS HERE '''
+vim = False     # set vim-keybindings
+
+# check config file for custom key bindings first
+if vim:
+    CMD_OPEN = 'e'  # edit
+    CMD_HELP = 'l'  # list ???
+    CMD_UP = 'k'
+    CMD_DOWN = 'j'
+    CMD_LEFT = 'h'
+    CMD_RIGHT = 'l'
+    CMD_INSERT = 'i'
+    CMD_DELETE = 'd'
+    CMD_SAVE = 'w'
+    CMD_QUIT = 'q'
+else:
+    CMD_OPEN = 'o'
+    CMD_HELP = 'h'
+    CMD_UP = 'KEY_UP'
+    CMD_DOWN = 'KEY_DOWN'
+    CMD_LEFT = 'KEY_LEFT'
+    CMD_RIGHT = 'KEY_RIGHT'
+    CMD_INSERT = 'i'
+    CMD_INSERT_BELOW = 'o'
+    CMD_INSERT_ABOVE = 'O'
+    CMD_DELETE = 'x'
+    CMD_SAVE = 's'
+    CMD_QUIT = 'q'
 
 is_window = False
 
@@ -38,7 +71,7 @@ def initialize():
     global height, width
     stdscr.clear()
     stdscr.addstr(0, 0, '---KANBAN PLANNING TOOL---', curses.A_BOLD)
-    stdscr.addstr(1, 0, 'Please enter a command (\'h\' for help, \'q\' to quit).')
+    stdscr.addstr(1, 0, f'Please enter a command (\'{CMD_HELP}\' for help, \'{CMD_QUIT}\' to quit).')
     stdscr.addstr(height -1, 0,  'STATUS BAR')
     stdscr.refresh()
 
@@ -47,10 +80,12 @@ def display_help():
     # if a window is displayed, clear the screen first
     if is_window:
         stdscr.clear()
-    stdscr.addstr(3, 0, 'a - add new task')
-    stdscr.addstr(4, 0, 'd - delete selected task')
-    stdscr.addstr(5, 0, 's - save kanban list to file')
-    stdscr.addstr(6, 0, 'q - quit')
+        initialize()
+    
+    stdscr.addstr(3, 0, f'{CMD_HELP} - add new task')
+    stdscr.addstr(4, 0, f'd - delete selected task')
+    stdscr.addstr(5, 0, f'{CMD_SAVE} - save kanban list to file')
+    stdscr.addstr(6, 0, f'{CMD_QUIT} - quit')
     stdscr.addstr(8, 0, 'Press a key to continue...')
     stdscr.refresh()
     stdscr.getkey()
@@ -86,11 +121,11 @@ cmd = None
 while (cmd != 'q'):
     cmd = stdscr.getkey()
     
-    if cmd == 'h':
+    if cmd == CMD_HELP:
         display_help()
     elif cmd == 'b':
         generate_board()
-    elif cmd == 'KEY_RIGHT':
+    elif cmd == CMD_RIGHT:
         display_help()
         pass
     else:
