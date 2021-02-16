@@ -59,11 +59,11 @@ class note:
 
 ''' Test Area '''
 
-a = note('quotes', 'INGSOC')
-a.edit_note('\nWAR IS PEACE')
+a = note('quotes', 'I came, I saw, I conquered')
+a.edit_note('\nI think, therefore I am')
 a.output()
 
-b = todo_list('General Todo')
-b.add_task('Perso abholen')
-b.add_task('3 Frgz zsm')
+b = todo_list('Personal Todo List')
+b.add_task('walk the dog')
+b.add_task('get groceries')
 b.output()

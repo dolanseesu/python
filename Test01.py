@@ -1,4 +1,8 @@
 '''
+This file contains several snippets to test different functionalities within python and is only used to look up things.
+'''
+
+'''
 Test with class properties
 
 class Spam(object):

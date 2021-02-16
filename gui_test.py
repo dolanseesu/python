@@ -1,3 +1,7 @@
+'''
+Simple program to test some functionalities of the tkinter module
+'''
+
 # always import libraries with an alias so you know wich is your code and which is the import
 import tkinter as tk
 from tkinter.ttk import *
