@@ -53,6 +53,8 @@ else:
 
 is_window = False
 
+testlist = [{'task': 'GPM M3', 'due': '18.02.2021'}, {'task': 'ReWe Bericht', 'due': '20.02.2021'}]
+
 # initialize screen
 stdscr = curses.initscr()
 
@@ -83,7 +85,7 @@ def display_help():
         initialize()
     
     stdscr.addstr(3, 0, f'{CMD_HELP} - add new task')
-    stdscr.addstr(4, 0, f'd - delete selected task')
+    stdscr.addstr(4, 0, f'{CMD_DELETE} - delete selected task')
     stdscr.addstr(5, 0, f'{CMD_SAVE} - save kanban list to file')
     stdscr.addstr(6, 0, f'{CMD_QUIT} - quit')
     stdscr.addstr(8, 0, 'Press a key to continue...')
@@ -103,13 +105,39 @@ def quit_program():
 
 def generate_board():
     global is_window
-    is_window = True
-    board = curses.newwin(50, 100, 2, 0)
-    board.addstr(0, 0, "Hello from 0,0")
-    board.addstr(4, 4, "Hello from 4,4")
-    board.addstr(5, 5, "Hello from 5,15 with a long string")
+
+    if is_window:
+        stdscr.clear()    
+        initialize()   # remove later 
+    
+    board = curses.newwin(50, 100, 3, 0)
+    board.addstr(0, 0, 'Hello from 0,0')
+    board.addstr(4, 4, 'Hello from 4,4')
+    board.addstr(5, 5, 'Hello from 5,15 with a long string')
     board.refresh()
     
+    is_window = True
+    
+def gen_kanban():
+    global is_window
+
+    if is_window:
+        stdscr.clear()    
+        initialize()   # remove later 
+
+    board = curses.newwin(50, 100, 3, 0)    # (rows, cols, start-y, start-x)
+    board.addstr(0, 0, 'BACKLOG | IN PROGRESS | DONE')
+    board.addstr(1, 0, 10 * '-')
+    board.refresh()
+
+    for i in range(0, len(testlist)):
+        board.addstr(i + 2, 0, f'{testlist[i]["task"]} | - | - ')
+        board.refresh()
+   
+    board.refresh()
+    
+    is_window = True
+
 
 #Start program
 initialize()
@@ -127,7 +155,8 @@ while (cmd != 'q'):
         generate_board()
     elif cmd == CMD_RIGHT:
         display_help()
-        pass
+    elif cmd == 'g':
+        gen_kanban()
     else:
         continue
 
