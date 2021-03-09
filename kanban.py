@@ -27,7 +27,7 @@ vim = False     # set vim-keybindings
 
 # check config file for custom key bindings first
 if vim:
-    CMD_OPEN = 'e'  # edit
+    CMD_LOAD_FILE = 'e'  # edit
     CMD_HELP = 'l'  # list ???
     CMD_UP = 'k'
     CMD_DOWN = 'j'
@@ -38,7 +38,7 @@ if vim:
     CMD_SAVE = 'w'
     CMD_QUIT = 'q'
 else:
-    CMD_OPEN = 'o'
+    CMD_LOAD_FILE = 'o'
     CMD_HELP = 'h'
     CMD_UP = 'KEY_UP'
     CMD_DOWN = 'KEY_DOWN'
