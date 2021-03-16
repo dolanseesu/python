@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#!/usr/bin/env python3
 
 '''
 A small script that executes different nmap scans
@@ -6,58 +6,60 @@ A small script that executes different nmap scans
 Part of this is still broken and the output needs to be formated properly
 '''
 
-import nmap
-import time
+import time, sys
+
+try:
+    import nmap
+except ImportError:
+    print('Missing dependency detected, exiting.')
+    sys.exit()
 
 scanner = nmap.PortScanner()
 
 print('--- Small Python nmap automation script ---')
 
-ip_addr = input('Please enter the IP to scan: ')
+#ip_addr = input('Please enter the IP to scan: ')
+ip_addr = '192.168.1.1'
 ports = '1-1024'    # maybe make this interactive in the future
 
 
 cmd = input('''\nPlease enter the type of scan:
-               1) TCP Scan
-               2) UDP Scan
-               3) Comprehensive Scan\n''')
+               1) TCP Scan (-sS)
+               2) UDP Scan (-sU)
+               3) Comprehensive Scan (-sS -sV -sC -A -O)\n''')
+
+print('Starting scan...')
+start_time = time.time()    # measure time
 
 if cmd == '1':
-    start_time = time.time()
-
-    print('Nmap version: ', str(scanner.nmap_version()[0]) + '.' + str(scanner.nmap_version()[1]))
+    protocol = 'tcp'
     scanner.scan(ip_addr, ports, '-v -sS')
-    print(scanner.scaninfo())
-    print('IP Status: ', scanner[ip_addr].state())
-
-    print('Open Ports: ', end='') 
-    for i in scanner[ip_addr]['tcp'].keys():
-        print(i, '', end='')
-
-    print(f'\nFinished in {round(time.time() - start_time, 2)} seconds')
-    print(scanner[ip_addr])
 
 elif cmd == '2':
-    start_time = time.time()
-
-    print('Nmap version: ', str(scanner.nmap_version()[0]) + '.' + str(scanner.nmap_version()[1]))
+    protocol = 'udp'
     scanner.scan(ip_addr, ports, '-v -sU')
-    print(scanner.scaninfo())
-    print('IP Status: ', scanner[ip_addr].state())
-    print('Open Ports: ', scanner[ip_addr]['udp'].keys())
-    
-    print(f'\nFinished in {round(time.time() - start_time, 2)} seconds')
 
 elif cmd == '3':
-    start_time = time.time()
-
-    print('Nmap version: ', str(scanner.nmap_version()[0]) + '.' + str(scanner.nmap_version()[1]))
+    protocol = 'tcp'
     scanner.scan(ip_addr, ports, '-v -sS -sV -sC -A -O')
-    print(scanner.scaninfo())
-    print('IP Status: ', scanner[ip_addr].state())
-    print('Open Ports: ', scanner[ip_addr]['tcp'].keys())
-
-    print(f'Finished in {round(time.time() - start_time, 2)} seconds')
 
 else:
     print('Please enter a number between 1 and 3.')
+    sys.exit()
+
+
+print('\nNmap version:', str(scanner.nmap_version()[0]) + '.' + str(scanner.nmap_version()[1]))
+print('IP range:' + 4* ' ', scanner.scaninfo()[protocol]['services'])
+print('IP Status:' + 3* ' ', scanner[ip_addr].state())
+
+print('Open Ports:' + 3* ' ' , end='') 
+for i, j in enumerate(scanner[ip_addr][protocol]):
+    if i < len(scanner[ip_addr][protocol].keys()) -1:
+        print(j, end=', ')
+    else:
+        print(j)    # dont print a comma after the last item
+
+print(f'\nFinished in {round(time.time() - start_time, 2)} seconds.')
+    
+#print(scanner.scaninfo())
+#print(scanner[ip_addr])
